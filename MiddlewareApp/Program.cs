@@ -21,6 +21,7 @@ var app = builder.Build();
  * 
  **/
 
+/*
 
 app.UseExceptionHandler("Error");
 app.UseHsts();
@@ -34,6 +35,9 @@ app.UseSession();
 app.MapControllers();
 
 
+*/
+
+
 /** 
  * 
  * 
@@ -44,21 +48,17 @@ app.MapControllers();
 
 
 
-
 // Using Run you cannot create chain of middlewares
-
 // app.Run( async (HttpContext context) => {
 //    await context.Response.WriteAsync("Hello");
 // });
 
 
-
-
 // To Create Chain of middlewares you need to use the USE() method with 2 parameters. 
 
-
 // Middleware 1
-app.Use(async (HttpContext context, RequestDelegate next) => {
+app.Use(async (HttpContext context, RequestDelegate next) =>
+{
     context.Response.ContentType = "text/html";
     await context.Response.WriteAsync("<p>Middleware 1<p>");
 
@@ -76,10 +76,37 @@ app.UseCustomMiddleware2();
 app.UseCustomFromSctrachMiddleware();
 
 // Middleware 3
-app.Run(async (HttpContext context) => {
+app.Use(async (HttpContext context, RequestDelegate next) => {
     await context.Response.WriteAsync("<p>Middleware 3</p>");
+    await next(context);
 });
 
 
 
-//app.Run();
+/** 
+ * 
+ * 
+ * UseWhen Exercise
+ * 
+ * 
+ **/
+
+app.UseWhen(
+    context => context.Request.Query.ContainsKey("username"), // Condition that we need to check
+    app => {
+        app.Use(async (context, next) =>
+        {
+            await context.Response.WriteAsync("<p>Hello From Middleware UseWhen</p>");
+
+            await next();
+        });
+    }
+ );
+
+app.Run(async (HttpContext context) => {
+    context.Response.ContentType = "text/html";
+    await context.Response.WriteAsync("<p>Middleware After UseWhen<p>");
+});
+
+
+app.Run();

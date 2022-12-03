@@ -17,9 +17,9 @@ namespace MiddlewareApp.Middlewares
         public async Task Invoke(HttpContext httpContext)
         {
 
-            if (httpContext.Request.Query.ContainsKey("fistname") && httpContext.Request.Query.ContainsKey("lastname"))
+            if (httpContext.Request.Query.ContainsKey("firstname") && httpContext.Request.Query.ContainsKey("lastname"))
             {
-                string fullname = httpContext.Request.Query["fistname"] + " " + httpContext.Request.Query["lastname"];
+                string fullname = httpContext.Request.Query["firstname"] + " " + httpContext.Request.Query["lastname"];
                 await httpContext.Response.WriteAsync(fullname);
             }
 
