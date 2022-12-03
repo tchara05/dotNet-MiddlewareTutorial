@@ -13,7 +13,7 @@ namespace MiddlewareApp.Middlewares
     }
 
 
-    // Injecting it to the app object to use more clearly
+    // Injecting it to the app object to use more clearly. 
     public static class CustomMiddleware2Extension
     {
         public static IApplicationBuilder UseCustomMiddleware2(this IApplicationBuilder app)
